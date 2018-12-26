@@ -18,11 +18,7 @@ export default {
     }
   },
   methods: {
-    getParams () {
-      return this
-    },
-    setParams (pageNum, pageTotal, pageSize) {
-      this.pageNum = pageNum
+    setParams (pageTotal, pageSize) {
       this.pageTotal = pageTotal
       if (pageSize) { this.pageSize = pageSize }
     },

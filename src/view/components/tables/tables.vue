@@ -97,7 +97,7 @@ export default {
         url: 'get_table_data',
         data: {
           pageInfo: {
-            pageNum: this.$refs.pageInfo.getParams().pageNum
+            pageNum: this.$refs.pageInfo.pageNum
           },
           search: {
             name: ''
@@ -107,7 +107,7 @@ export default {
       }).then(res => {
         let returnData = res.data.returnData
         this.tableData = returnData.datalist
-        this.$refs.pageInfo.setParams(returnData.pageNum,returnData.pageTotal);
+        this.$refs.pageInfo.setParams(returnData.pageTotal,returnData.pageSize || null);
       })
     }
   },
