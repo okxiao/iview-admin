@@ -1,9 +1,10 @@
 <template>
   <div>
     <Card>
-      <Button @click="showWindowBDrawer = true" type="primary" style="float: right;">添加</Button>
+      <Button @click="showWindowBDrawer = true" type="primary" style="float: right;"><Icon type="md-add" style="margin-top: -2px;" :size="14"></Icon>添加</Button>
+      <Button style="float: right;margin-right: 10px" type="primary" @click="exportExcel"><Icon type="md-aperture" style="margin-top: -2px;" :size="14"></Icon>导出</Button>
       <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
-      <Button style="margin: 10px 0;" type="primary" @click="exportExcel">导出为Csv文件</Button>
+      <page ref="pageInfo"></page>
       <drag-drawer v-model="showWindowBDrawer"
                    :width.sync="width1"
                    :min-width="600"
@@ -21,27 +22,29 @@
 </template>
 
 <script>
+import axios from '@/libs/api.request'
 import Tables from '_c/tables'
 import DragDrawer from '_c/drag-drawer'
 import test from '@/components/form/test'
+import page from '@/components/page/page'
 
-import { getTableData } from '@/api/data'
 export default {
   name: 'tables_page',
   components: {
     Tables,
     DragDrawer,
+    page,
     test
   },
   data () {
     return {
-      /* 侧边弹出 */
+      /* 侧边弹出-加载即弹出 */
       showWindowBDrawer: false,
-      /* 侧边弹出 */
+      /* 侧边弹出-是否可移动 */
       draggable: false,
-      /* 侧边弹出 */
+      /* 侧边弹出-方向 */
       placement: false,
-      /* 侧边弹出 */
+      /* 侧边弹出-宽度 */
       width1: 600,
       columns: [
         { title: 'Name', key: 'name', sortable: true },
@@ -97,8 +100,12 @@ export default {
     }
   },
   mounted () {
-    getTableData().then(res => {
+    axios.request({
+      url: 'get_table_data',
+      method: 'get'
+    }).then(res => {
       this.tableData = res.data.returnData
+      this.$refs.pageInfo.init(2,500);
     })
   }
 }
