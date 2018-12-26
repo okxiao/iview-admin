@@ -1,6 +1,6 @@
 <template>
   <div class="page-list">
-    <Page :total="pageTotal" :current="pageCurrent" :page-size="pageSize" show-total show-elevator/>
+    <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" @on-change="changePage" show-total show-elevator/>
   </div>
 </template>
 <script>
@@ -14,14 +14,21 @@ export default {
       /* 分页-每页显示多少条 */
       pageSize: 20,
       /* 分页-页码 */
-      pageCurrent: 1
+      pageNum: 1
     }
   },
   methods: {
-    init (pageCurrent, pageTotal, pageSize) {
-      this.pageCurrent = pageCurrent
+    getParams () {
+      return this
+    },
+    setParams (pageNum, pageTotal, pageSize) {
+      this.pageNum = pageNum
       this.pageTotal = pageTotal
       if (pageSize) { this.pageSize = pageSize }
+    },
+    changePage (index) {
+      this.pageNum = index
+      this.$emit('datalist')
     }
   }
 }

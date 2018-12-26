@@ -4,7 +4,7 @@
       <Button @click="showWindowBDrawer = true" type="primary" style="float: right;"><Icon type="md-add" style="margin-top: -2px;" :size="14"></Icon>添加</Button>
       <Button style="float: right;margin-right: 10px" type="primary" @click="exportExcel"><Icon type="md-aperture" style="margin-top: -2px;" :size="14"></Icon>导出</Button>
       <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
-      <page ref="pageInfo"></page>
+      <page ref="pageInfo" @datalist="datalist"></page>
       <drag-drawer v-model="showWindowBDrawer"
                    :width.sync="width1"
                    :min-width="600"
@@ -91,22 +91,34 @@ export default {
       this.$refs.tables.exportCsv({
         filename: `table-${(new Date()).valueOf()}.csv`
       })
+    },
+    datalist () {
+      axios.request({
+        url: 'get_table_data',
+        data: {
+          pageInfo: {
+            pageNum: this.$refs.pageInfo.getParams().pageNum
+          },
+          search: {
+            name: ''
+          }
+        },
+        method: 'post'
+      }).then(res => {
+        let returnData = res.data.returnData
+        this.tableData = returnData.datalist
+        this.$refs.pageInfo.setParams(returnData.pageNum,returnData.pageTotal);
+      })
     }
   },
-  /* 侧边弹出 */
   computed: {
+    /* 侧边弹出 */
     placementComputed () {
       return this.placement ? 'left' : 'right'
     }
   },
   mounted () {
-    axios.request({
-      url: 'get_table_data',
-      method: 'get'
-    }).then(res => {
-      this.tableData = res.data.returnData
-      this.$refs.pageInfo.init(2,500);
-    })
+    this.datalist()
   }
 }
 </script>
