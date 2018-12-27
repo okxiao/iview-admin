@@ -1,9 +1,9 @@
 <template>
   <div>
     <Card>
-      <Button @click="showWindowBDrawer = true" type="primary" style="float: right;"><Icon type="md-add" style="margin-top: -2px;" :size="14"></Icon>添加</Button>
+      <Button @click="showWindowBDrawer = !showWindowBDrawer" type="primary" style="float: right;"><Icon type="md-add" style="margin-top: -2px;" :size="14"></Icon>添加</Button>
       <Button style="float: right;margin-right: 10px" type="primary" @click="exportExcel"><Icon type="md-aperture" style="margin-top: -2px;" :size="14"></Icon>导出</Button>
-      <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
+      <tables ref="tables" @datalist="datalist" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
       <drag-drawer v-model="showWindowBDrawer"
                    :width.sync="width1"
                    :min-width="600"
@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      /* 侧边弹出-加载即弹出 */
+      /* 侧边弹出-弹出开关 */
       showWindowBDrawer: false,
       /* 侧边弹出-是否可移动 */
       draggable: false,
@@ -107,7 +107,7 @@ export default {
         let returnData = res.data.returnData
         this.tableData = returnData.datalist
         this.$refs.tables.pageTotal = returnData.pageTotal
-        // this.$refs.pageInfo.pageTotal.pageSize = returnData.pageSize
+        // this.$refs.tables.pageTotal.pageSize = returnData.pageSize
       })
     }
   },
