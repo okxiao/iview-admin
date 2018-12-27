@@ -4,7 +4,6 @@
       <Button @click="showWindowBDrawer = true" type="primary" style="float: right;"><Icon type="md-add" style="margin-top: -2px;" :size="14"></Icon>添加</Button>
       <Button style="float: right;margin-right: 10px" type="primary" @click="exportExcel"><Icon type="md-aperture" style="margin-top: -2px;" :size="14"></Icon>导出</Button>
       <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
-      <page ref="pageInfo" @datalist="datalist"></page>
       <drag-drawer v-model="showWindowBDrawer"
                    :width.sync="width1"
                    :min-width="600"
@@ -26,14 +25,12 @@ import axios from '@/libs/api.request'
 import Tables from '_c/tables'
 import DragDrawer from '_c/drag-drawer'
 import test from '@/components/form/test'
-import page from '@/components/page/page'
 
 export default {
   name: 'tables_page',
   components: {
     Tables,
     DragDrawer,
-    page,
     test
   },
   data () {
@@ -47,6 +44,8 @@ export default {
       /* 侧边弹出-宽度 */
       width1: 600,
       columns: [
+        // { type: 'index', width: 60, align: 'center' },
+        // { type: 'selection', width: 60, align: 'center' },
         { title: 'Name', key: 'name', sortable: true },
         { title: 'Email', key: 'email', editable: true },
         { title: 'Create-Time', key: 'createTime' },
@@ -97,7 +96,7 @@ export default {
         url: 'get_table_data',
         data: {
           pageInfo: {
-            pageNum: this.$refs.pageInfo.pageNum
+            pageNum: this.$refs.tables.pageNum
           },
           search: {
             name: ''
@@ -107,7 +106,8 @@ export default {
       }).then(res => {
         let returnData = res.data.returnData
         this.tableData = returnData.datalist
-        this.$refs.pageInfo.setParams(returnData.pageTotal,returnData.pageSize || null);
+        this.$refs.tables.pageTotal = returnData.pageTotal
+        // this.$refs.pageInfo.pageTotal.pageSize = returnData.pageSize
       })
     }
   },

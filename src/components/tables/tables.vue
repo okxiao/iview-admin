@@ -38,6 +38,9 @@
       <slot name="footer" slot="footer"></slot>
       <slot name="loading" slot="loading"></slot>
     </Table>
+    <div class="page-list">
+      <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" @on-change="changePage" show-total show-elevator/>
+    </div>
     <div v-if="searchable && searchPlace === 'bottom'" class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
         <Option v-for="item in columns" v-if="item.key !== 'handle'" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
@@ -148,10 +151,17 @@ export default {
       edittingCellId: '',
       edittingText: '',
       searchValue: '',
-      searchKey: ''
+      searchKey: '',
+      pageTotal: 0, /* 分页-总条数 */
+      pageSize: 20, /* 分页-每页显示多少条 */
+      pageNum: 1 /* 分页-页码 */
     }
   },
   methods: {
+    changePage (index) {
+      this.pageNum = index
+      this.$emit('datalist')
+    },
     suportEdit (item, index) {
       item.render = (h, params) => {
         return h(TablesEdit, {
