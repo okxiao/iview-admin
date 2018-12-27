@@ -17,7 +17,7 @@
       <Row>
         <Col span="11">
           <FormItem prop="date">
-            <DatePicker type="date" placeholder="Select date" v-model="formValidate.date"></DatePicker>
+            <DatePicker type="date" placeholder="Select date" format="yyyy-MM-dd" v-model="formValidate.date"></DatePicker>
           </FormItem>
         </Col>
         <Col span="2" style="text-align: center">-</Col>
@@ -53,6 +53,7 @@
   </Form>
 </template>
 <script>
+import axios from '@/libs/api.request'
 export default {
   data () {
     return {
@@ -66,34 +67,49 @@ export default {
         time: '',
         desc: ''
       },
+      async create () {
+        await this.request('user/create', this.toJson(this.formValidate))
+      },
+      async update () {
+        await this.request('user/update', this.toJson(this.formValidate))
+      },
+      request (url, data) {
+        return axios.request({
+          url: url,
+          data,
+          method: 'post'
+        }).then(res => {
+          this.$Message.success(res.data.message)
+        })
+      },
       ruleValidate: {
-        name: [
-          { required: true, message: 'The name cannot be empty', trigger: 'blur' }
-        ],
-        mail: [
-          { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
-          { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
-        ],
-        city: [
-          { required: true, message: 'Please select the city', trigger: 'change' }
-        ],
-        gender: [
-          { required: true, message: 'Please select gender', trigger: 'change' }
-        ],
-        interest: [
-          { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
-          { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
-        ],
-        date: [
-          { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-        ],
-        time: [
-          { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
-        ],
-        desc: [
-          { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
-          { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
-        ]
+        // name: [
+        //   { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+        // ],
+      //   mail: [
+      //     { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+      //     { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+      //   ],
+      //   city: [
+      //     { required: true, message: 'Please select the city', trigger: 'change' }
+      //   ],
+      //   gender: [
+      //     { required: true, message: 'Please select gender', trigger: 'change' }
+      //   ],
+      //   interest: [
+      //     { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
+      //     { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+      //   ],
+      //   date: [
+      //     { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+      //   ],
+      //   time: [
+      //     { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+      //   ],
+      //   desc: [
+      //     { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
+      //     { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+      //   ]
       }
     }
   },
@@ -101,7 +117,8 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('Success!')
+          // this.$Message.success('Success!')
+          this.create()
         } else {
           this.$Message.error('Fail!')
         }

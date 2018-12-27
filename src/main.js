@@ -36,6 +36,11 @@ Vue.config.productionTip = false
  * @description 全局注册应用配置
  */
 Vue.prototype.$config = config
+
+Vue.prototype.toJson = function (obj){
+  return JSON.parse(JSON.stringify( obj ));
+}
+
 /**
  * 注册指令
  */

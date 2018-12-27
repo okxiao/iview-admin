@@ -158,8 +158,8 @@ export default {
     }
   },
   methods: {
-    changePage (index) {
-      this.pageNum = index
+    changePage (pageNum) {
+      this.pageNum = pageNum
       this.$emit('datalist')
     },
     suportEdit (item, index) {
