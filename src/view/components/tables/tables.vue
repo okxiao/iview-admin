@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import './table.less'
 import axios from '@/libs/api.request'
 import Tables from '_c/tables'
 import DragDrawer from '_c/drag-drawer'
@@ -46,14 +47,30 @@ export default {
       columns: [
         // { type: 'index', width: 60, align: 'center' },
         // { type: 'selection', width: 60, align: 'center' },
-        { title: 'Name', key: 'name', sortable: true },
-        { title: 'Email', key: 'email', editable: true },
-        { title: 'Create-Time', key: 'createTime' },
+        { title: 'Name', key: 'name', sortable: true, align: 'center' },
+        { title: 'Email', key: 'email', editable: true, align: 'center' },
+        { title: 'Create-Time', key: 'createTime', align: 'center' },
         {
           title: 'Handle',
           key: 'handle',
-          options: ['delete'],
+          align: 'center',
           button: [
+            (h, params, vm) => {
+              return h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.show(params.index)
+                  }
+                }
+              }, '查看')
+            },
             (h, params, vm) => {
               return h('Poptip', {
                 props: {
@@ -67,7 +84,12 @@ export default {
                   }
                 }
               }, [
-                h('Button', '自定义删除')
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  }
+                }, '删除')
               ])
             }
           ]
@@ -84,6 +106,7 @@ export default {
       console.log(atMin);
     },
     handleDelete (params) {
+      //删除事件
       console.log(params)
     },
     exportExcel () {
