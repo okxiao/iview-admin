@@ -14,7 +14,7 @@
           <Icon type="md-aperture" :size="18"></Icon>
           <b>这是标题</b>
         </div>
-        <test></test>
+        <test @close="close"></test>
       </drag-drawer>
     </Card>
   </div>
@@ -90,6 +90,11 @@ export default {
       this.$refs.tables.exportCsv({
         filename: `table-${(new Date()).valueOf()}.csv`
       })
+    },
+    close () {
+      //关闭遮罩层
+      this.showWindowBDrawer = false
+      this.datalist()
     },
     datalist () {
       axios.request({

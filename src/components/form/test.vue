@@ -43,8 +43,7 @@
       </CheckboxGroup>
     </FormItem>
     <FormItem label="Desc" prop="desc">
-      <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
-             placeholder="Enter something..."></Input>
+      <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
     </FormItem>
     <FormItem>
       <Button type="primary" @click="handleSubmit('formValidate')">Submit</Button>
@@ -58,6 +57,7 @@ export default {
   data () {
     return {
       formValidate: {
+        key: '',
         name: '',
         mail: '',
         city: '',
@@ -117,9 +117,12 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          // this.$Message.success('Success!')
-          this.create()
-          // this.$emit('on-close')
+          if (this.key) {
+            this.update()
+          } else {
+            this.create()
+          }
+          this.$emit('close')
         } else {
           this.$Message.error('Fail!')
         }
