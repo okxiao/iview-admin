@@ -46,8 +46,8 @@
       <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
     </FormItem>
     <FormItem>
-      <Button type="primary" @click="handleSubmit('formValidate')">Submit</Button>
-      <Button @click="handleReset('formValidate')" style="margin-left: 8px">Reset</Button>
+      <Button type="primary" @click="handleSubmit('formValidate')">保存</Button>
+      <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
     </FormItem>
   </Form>
 </template>
@@ -122,6 +122,7 @@ export default {
           } else {
             this.create()
           }
+          this.handleReset(name)
           this.$emit('close')
         } else {
           this.$Message.error('Fail!')

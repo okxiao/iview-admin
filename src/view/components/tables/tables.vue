@@ -2,8 +2,8 @@
   <div>
     <Card>
       <Button @click="showWindowBDrawer = !showWindowBDrawer" type="primary" style="float: right;"><Icon type="md-add" style="margin-top: -2px;" :size="14"></Icon>添加</Button>
-      <Button style="float: right;margin-right: 10px" type="primary" @click="exportExcel"><Icon type="md-aperture" style="margin-top: -2px;" :size="14"></Icon>导出</Button>
-      <tables ref="tables" @datalist="datalist" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
+      <!--<Button style="float: right;margin-right: 10px" type="primary" @click="exportExcel"><Icon type="md-aperture" style="margin-top: -2px;" :size="14"></Icon>导出</Button>-->
+      <tables ref="tables" @datalist="datalist" searchable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
       <drag-drawer v-model="showWindowBDrawer"
                    :width.sync="width1"
                    :min-width="600"
@@ -14,7 +14,7 @@
           <Icon type="md-aperture" :size="18"></Icon>
           <b>这是标题</b>
         </div>
-        <test @close="close"></test>
+        <test ref="test" @close="close"></test>
       </drag-drawer>
     </Card>
   </div>
@@ -47,11 +47,11 @@ export default {
       columns: [
         // { type: 'index', width: 60, align: 'center' },
         // { type: 'selection', width: 60, align: 'center' },
-        { title: 'Name', key: 'name', sortable: true, align: 'center' },
-        { title: 'Email', key: 'email', editable: true, align: 'center' },
+        { title: 'Name', key: 'name', align: 'center' },
+        { title: 'Email', key: 'email', align: 'center' },
         { title: 'Create-Time', key: 'createTime', align: 'center' },
         {
-          title: 'Handle',
+          title: '操作',
           key: 'handle',
           align: 'center',
           button: [
@@ -66,10 +66,10 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index)
+                    this.edit(params)
                   }
                 }
-              }, '查看')
+              }, '编辑')
             },
             (h, params, vm) => {
               return h('Poptip', {
@@ -105,9 +105,14 @@ export default {
       /* eslint-disable */
       console.log(atMin);
     },
+    edit (params) {
+      let formField = this.$refs.test._data.formValidate
+      formField.name = 123;
+      this.showWindowBDrawer = true
+    },
     handleDelete (params) {
       //删除事件
-      console.log(params)
+      console.log(params.row.name)
     },
     exportExcel () {
       this.$refs.tables.exportCsv({
